@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!--To use JQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <form id="loginForm" >
+        <div class="form-group">
+            <label for="inputEmail">Username:</label>
+            <input type="username" class="form-control" name="Username" placeholder="Username">
+        </div>
+        <div class="form-group">
+            <label for="inputPassword">Password:</label>
+            <input type="password" class="form-control" name="Password" placeholder="Password">
+        </div>
+        <div class="form-group">
+            <button id="btnsubmit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+    <div class="resultContainer">
+       <div class="alert alert-success" id="successResult" role="alert">
+            lOGIN SUCCESSFUL
+        </div>
+        <div class="alert alert-danger" id="failedResult" role="alert">
+            lOGIN FAILED
+        </div>
+        <p id="entityDetails">
+        </p>
+    </div>
+
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        
+        $("#btnsubmit").click( function (e) {
+            e.preventDefault();
+            //Serialize the form datas.
+            var valdata = $("#loginForm").serialize();
+           
+            $.ajax({
+                url: "/Home/Login",
+                type: "GET",
+                data: valdata,
+                success:  function (result) {
+                    $("#successResult").css({ visibility: 'visible' });
+                    $("#entityDetails").css({ visibility: 'visible' });
+                    $("#entityDetails").show().html(result);
+                }, 
+                error: function () {
+                    $("#failedResult").css({ visibility: 'visible' });
+                }
+            });
+
+            Fade();
+        });
+
+    });
+
+
+    function Fade(){
+        setTimeout(
+            function () {
+                $("#successResult").css({ visibility: 'collapse' });
+                $("#failedResult").css({ visibility: 'collapse' });
+                $("#entityDetails").css({ visibility: 'collapse' });
+            }, 5000);
+    }
+</script>
+
